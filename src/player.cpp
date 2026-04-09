@@ -1,12 +1,18 @@
 #include "player.hpp"
 
 #include <QBrush>
+#include <QGraphicsScene>
+#include <QMessageBox>
 
 Player::Player(QGraphicsItem* parent)
-    : QObject(), QGraphicsRectItem(parent), velocityY(0), onGround(false) {
+    : QObject(),
+      QGraphicsRectItem(parent),
+      velocityY(0),
+      onGround(false),
+      spawnPos(300, 0) {
   setRect(0, 0, 30, 60);
   setBrush(Qt::red);
-  setPos(300, 0);
+  setPos(spawnPos);
 
   setFlag(QGraphicsItem::ItemIsFocusable);
   setFocus();
@@ -28,6 +34,13 @@ void Player::updateState() {
   velocityY += 1;
   onGround = false;
   moveBy(0, velocityY);
+
+  if (scene() && y() > scene()->sceneRect().bottom()) {
+    velocityY = 0;
+    setPos(spawnPos);
+    QMessageBox::information(nullptr, "Game Over", "You lost!");
+    return;
+  }
 
   const QList<QGraphicsItem*> items = collidingItems();
   if (items.isEmpty()) {

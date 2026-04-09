@@ -3,6 +3,7 @@
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
 #include <QObject>
+#include <QPointF>
 
 class Player : public QObject, public QGraphicsRectItem {
   Q_OBJECT
@@ -19,4 +20,5 @@ class Player : public QObject, public QGraphicsRectItem {
  private:
   int velocityY;
   bool onGround;
+  QPointF spawnPos;
 };
